@@ -12,7 +12,7 @@ entryPoints:
           to: websecure
           scheme: https
   websecure:
-    address: ":443"
+    address: ":6183"
   astrbot-entry:
     address: ":6184"
   napcat-entry:
