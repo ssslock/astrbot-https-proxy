@@ -30,7 +30,8 @@ http:
   middlewares:
     up-responder:
       contentType:
-        text/plain: "UP\n"  # ✅ 正确写法，不是 responses
+        **contentType: "text/plain; charset=utf-8"**  # ✅ 正确写法
+        **body: "UP\n"**                               # ✅ 正确写法
       
   services:
     # 指向主机上运行的 Astrbot
