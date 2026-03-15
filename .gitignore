@@ -1,0 +1,15 @@
+# 忽略证书文件（不要提交到 git）
+certs/
+*.crt
+*.key
+
+# 忽略数据目录
+astrobot/data/
+napcat/data/
+
+# 忽略环境变量文件
+.env
+*.env
+
+# 忽略日志
+*.log
