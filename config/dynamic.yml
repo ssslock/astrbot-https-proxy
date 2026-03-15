@@ -17,13 +17,20 @@ http:
       service: napcat-service
       tls: {}
 
-    # 根路径访问可以重定向到某个服务或显示信息
+    # 根路径返回 UP
     root-router:
-      rule: "Host(`111.231.16.98`)"  # 改为你的IP
+      rule: "Host(`你的公网IP`)"
       entryPoints:
         - websecure
-      service: root-service
+      middlewares:
+        - up-responder
+      service: dummy-service
       tls: {}
+
+  middlewares:
+    up-responder:
+      contentType:
+        text/plain: "UP\n"  # ✅ 正确写法，不是 responses
       
   services:
     # 指向主机上运行的 Astrbot
@@ -38,13 +45,11 @@ http:
         servers:
           - url: "http://127.0.0.1:3000"  # ⭐ 指向主机 IP + 实际端口
 
-    root-service:
+    dummy-service:
       loadBalancer:
         servers:
-          - url: "http://127.0.0.1:1"  # 指向不存在的端口
-        responses:
-          - status: 200
-            body: "UP"
+          - url: "http://127.0.0.1:1"  # 随便填，实际不会用到
+
 tls:
   certificates:
     - certFile: /certs/your-server.crt
