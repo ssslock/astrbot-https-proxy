@@ -1,54 +1,14 @@
-# ~/traefik-proxy/docker-compose.yml
 version: '3.8'
-
-networks:
-  traefik-net:
-    driver: bridge
 
 services:
   traefik:
     image: traefik:v3.0
     container_name: traefik
     restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
+    network_mode: "host"  # ⭐ 关键：使用 host 网络模式
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro  # 可选，如果不需要 Docker 发现可以去掉
       - ./config/traefik.yml:/etc/traefik/traefik.yml:ro
       - ./config/dynamic.yml:/etc/traefik/dynamic/dynamic.yml:ro
       - ./certs:/certs:ro
-    networks:
-      - traefik-net
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=Host(`123.123.123.123`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
-      - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.entrypoints=websecure"
-      - "traefik.http.routers.dashboard.tls=true"
-
-  astrbot-app:
-    image: ghcr.io/soulter/astrbot:latest  # Astrbot 官方镜像
-    container_name: astrbot
-    restart: unless-stopped
-    networks:
-      - traefik-net
-    volumes:
-      - ./astrobot/data:/app/data  # 持久化数据
-    labels:
-      - "traefik.enable=true"
-    # 不需要再暴露端口
-
-  napcat-app:
-    image: mlikiowa/napcat-docker:latest  # Napcat 官方镜像
-    container_name: napcat
-    restart: unless-stopped
-    networks:
-      - traefik-net
-    environment:
-      - NAPCAT_UID=1000
-      - NAPCAT_GID=1000
-    volumes:
-      - ./napcat/data:/app/.config/QQ  # 持久化数据
-    labels:
-      - "traefik.enable=true"
+    # 不需要 ports 映射，因为用了 host 网络
