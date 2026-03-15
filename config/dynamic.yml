@@ -16,22 +16,6 @@ http:
         - websecure
       service: napcat-service
       tls: {}
-
-    # 根路径返回 UP
-    root-router:
-      rule: "Host(`你的公网IP`)"
-      entryPoints:
-        - websecure
-      middlewares:
-        - up-responder
-      service: dummy-service
-      tls: {}
-
-  middlewares:
-    up-responder:
-      contentType:
-        contentType: "text/plain; charset=utf-8"
-        body: "UP\n"
       
   services:
     # 指向主机上运行的 Astrbot
@@ -45,11 +29,6 @@ http:
       loadBalancer:
         servers:
           - url: "http://127.0.0.1:3000"  # ⭐ 指向主机 IP + 实际端口
-
-    dummy-service:
-      loadBalancer:
-        servers:
-          - url: "http://127.0.0.1:1"  # 随便填，实际不会用到
 
 tls:
   certificates:
