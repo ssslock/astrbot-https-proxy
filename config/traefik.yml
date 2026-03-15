@@ -4,13 +4,8 @@ api:
   debug: true      # 开启 debug 模式（可选，会显示更多信息）
 
 entryPoints:
-  web:
-    address: ":80"
-    http:
-      redirections:
-        entryPoint:
-          to: websecure
-          scheme: https
+  astrbot_plugin_mnemosyne:
+    address: ":6183"
   websecure:
     address: ":6183"
   astrbot-entry:
