@@ -1,4 +1,8 @@
 # config/traefik.yml
+api:
+  dashboard: true  # 开启 dashboard
+  debug: true      # 开启 debug 模式（可选，会显示更多信息）
+
 entryPoints:
   web:
     address: ":80"
@@ -9,8 +13,22 @@ entryPoints:
           scheme: https
   websecure:
     address: ":443"
-  # 新增两个端口分别对应两个服务
   astrbot-entry:
-    address: ":6184"  # Astrbot 用 6184 端口
+    address: ":6184"
   napcat-entry:
-    address: ":6098"  # Napcat 用 6098 端口
+    address: ":6098"
+
+# 添加一个专门给 API 用的入口点（可选）
+  traefik-api:
+    address: ":443"  # API 和 dashboard 的入口
+
+providers:
+  file:
+    filename: /etc/traefik/dynamic/dynamic.yml
+    watch: true
+
+# 开启访问日志
+accessLog:
+  filePath: "/var/log/traefik/access.log"
+  format: json
+  bufferingSize: 100
