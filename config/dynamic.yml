@@ -1,0 +1,53 @@
+# ~/traefik-proxy/config/dynamic.yml
+tls:
+  certificates:
+    - certFile: /certs/your-server.crt
+      keyFile: /certs/your-server.key
+  # 设置为默认证书，确保所有 HTTPS 请求都使用这个证书
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /certs/your-server.crt
+        keyFile: /certs/your-server.key
+
+http:
+  routers:
+    # Astrbot 路由
+    astrbot-router:
+      rule: "Host(`111.231.16.98`) && PathPrefix(`/astrobot`)"  # 改为你的IP
+      entryPoints:
+        - websecure
+      service: astrbot-service
+      tls: {}
+
+    # Napcat 路由
+    napcat-router:
+      rule: "Host(`111.231.16.98`) && PathPrefix(`/napcat`)"  # 改为你的IP
+      entryPoints:
+        - websecure
+      service: napcat-service
+      tls: {}
+
+    # 根路径访问可以重定向到某个服务或显示信息
+    root-router:
+      rule: "Host(`111.231.16.98`)"  # 改为你的IP
+      entryPoints:
+        - websecure
+      service: root-service
+      tls: {}
+
+  services:
+    astrbot-service:
+      loadBalancer:
+        servers:
+          - url: "http://astrobot-app:6185"  # 根据实际端口调整
+
+    napcat-service:
+      loadBalancer:
+        servers:
+          - url: "http://napcat-app:6099"    # 根据实际端口调整
+
+    root-service:
+      loadBalancer:
+        servers:
+          - url: "http://astrobot-app:8080"  # 或者显示一个简单的欢迎页
