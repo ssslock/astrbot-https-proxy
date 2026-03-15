@@ -35,19 +35,22 @@ http:
         - websecure
       service: root-service
       tls: {}
-
+          
   services:
     astrbot-service:
       loadBalancer:
         servers:
-          - url: "http://astrobot-app:6185"  # 根据实际端口调整
+          - url: "http://astrbot:6185"  # 根据实际端口调整
 
     napcat-service:
       loadBalancer:
         servers:
-          - url: "http://napcat-app:6099"    # 根据实际端口调整
+          - url: "http://astrbot-napcat-prickett:6099"    # 根据实际端口调整
 
     root-service:
       loadBalancer:
         servers:
-          - url: "http://astrobot-app:8080"  # 或者显示一个简单的欢迎页
+          - url: "http://127.0.0.1:1"  # 指向不存在的端口
+        responses:
+          - status: 200
+            body: "UP"
