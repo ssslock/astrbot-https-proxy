@@ -1,34 +1,32 @@
 # config/dynamic.yml
 http:
   routers:
-    # Astrbot 路由
+    # Astrbot 路由 - 监听 6184 端口
     astrbot-router:
-      rule: "Host(`111.231.16.98`) && PathPrefix(`/astrobot`)"  # 或者直接用根路径
+      rule: "Host(`111.231.16.98`)"  # 不需要 PathPrefix 了
       entryPoints:
-        - websecure
+        - astrbot-entry  # 使用专门的入口点
       service: astrbot-service
       tls: {}
 
-    # Napcat 路由
+    # Napcat 路由 - 监听 6098 端口
     napcat-router:
-      rule: "Host(`111.231.16.98`) && PathPrefix(`/napcat`)"
+      rule: "Host(`111.231.16.98`)"  # 不需要 PathPrefix 了
       entryPoints:
-        - websecure
+        - napcat-entry  # 使用专门的入口点
       service: napcat-service
       tls: {}
-      
+
   services:
-    # 指向主机上运行的 Astrbot
     astrbot-service:
       loadBalancer:
         servers:
-          - url: "http://127.0.0.1:6185"  # ⭐ 指向主机 IP + 实际端口
+          - url: "http://127.0.0.1:6185"  # Astrbot 原端口
 
-    # 指向主机上运行的 Napcat
     napcat-service:
       loadBalancer:
         servers:
-          - url: "http://127.0.0.1:3000"  # ⭐ 指向主机 IP + 实际端口
+          - url: "http://127.0.0.1:6099"  # Napcat 原端口
 
 tls:
   certificates:
