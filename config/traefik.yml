@@ -1,7 +1,4 @@
-# ~/traefik-proxy/config/traefik.yml
-api:
-  dashboard: true
-
+# config/traefik.yml
 entryPoints:
   web:
     address: ":80"
@@ -12,11 +9,8 @@ entryPoints:
           scheme: https
   websecure:
     address: ":443"
-
-providers:
-  docker:
-    endpoint: "unix:///var/run/docker.sock"
-    exposedByDefault: false
-  file:
-    filename: /etc/traefik/dynamic/dynamic.yml
-    watch: true
+  # 新增两个端口分别对应两个服务
+  astrbot-entry:
+    address: ":6184"  # Astrbot 用 6184 端口
+  napcat-entry:
+    address: ":6098"  # Napcat 用 6098 端口
